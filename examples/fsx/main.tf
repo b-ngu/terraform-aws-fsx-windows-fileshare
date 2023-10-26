@@ -2,7 +2,7 @@ provider "aws" {
   region = var.region
 }
 
-module "fsx-windows" {
+module "fsx_windows" {
   source  = "../../"
 
   contact     = var.contact
