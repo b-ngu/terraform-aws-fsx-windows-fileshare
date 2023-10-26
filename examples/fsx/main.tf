@@ -16,7 +16,7 @@ module "fsx_windows" {
   managed_ad_id                   = "d-123456789"
   storage_capacity                = 32
   storage_type                    = "SSD"
-  subnet_ids                      = ["subnet-042ae28fd2a670ad9"]
+  subnet_ids                      = ["subnet-123456789"]
   throughput_capacity             = 16
-  vpc_id                          = "vpc-0e2008881bf9def09"
+  vpc_id                          = "vpc-123456789"
 }

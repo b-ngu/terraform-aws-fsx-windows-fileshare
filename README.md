@@ -10,6 +10,7 @@ The main purpose of this module is to provision an FSx for Windows File Server, 
 
 - [What is Amazon FSx for Windows File Server?](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html)
 - [Working with FSx File Systems](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/working-with-fsx.html)
+- [FSx with AWS Managed AD Pre-requisites](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/fsx-aws-managed-ad.html)
 
 ## Example Usage
 
@@ -40,7 +41,7 @@ Replace `path_to_this_module` with the path to where you have this module.
 ## FSx Components
 
 1. **File System**: The primary resource representing a virtual file system.
-2. **Windows Authentication**: This module assumes you are using AWS Managed Microsoft AD (different from self-managed Active Directory) to authenticate and manage your file system users and groups.
+2. **Windows Authentication**: This module assumes you are using `AWS Managed Microsoft AD` (different from self-managed Active Directory) to authenticate and manage your file system users and groups.
 3. **Backup**: Automatic daily backups of your file system are taken and retained for 7 days. You can also manually take backups.
 
 ## FSx Configuration
@@ -128,5 +129,13 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_fsx_id"></a> [fsx_id](#output_fsx_id) | The ID of the FSx Windows File Server |
+| <a name="output_fsx_owner_id"></a> [fsx_owner_id](#output_fsx_owner_id) | AWS account ID that created or owns the FSx Windows File Server |
+| <a name="output_fsx_arn"></a> [fsx_arn](#output_fsx_arn) | Amazon Resource Name (ARN) of the FSx Windows File Server |
+| <a name="output_fsx_kms_key_id"></a> [fsx_kms_key_id](#output_fsx_kms_key_id) | ARN for the KMS encryption key |
 | <a name="output_fsx_dns_name"></a> [fsx_dns_name](#output_fsx_dns_name) | The DNS name for the FSx Windows File Server |
+| <a name="output_fsx_preferred_file_server_ip"></a> [fsx_preferred_file_server_ip](#output_fsx_preferred_file_server_ip) | Preferred IP address for mounting the FSx Windows File Server |
+| <a name="output_fsx_network_interface_ids"></a> [fsx_network_interface_ids](#output_fsx_network_interface_ids) | ENI IDs associated with the FSx Windows File Server |
+| <a name="output_fsx_subnet_ids"></a> [fsx_subnet_ids](#output_fsx_subnet_ids) | Subnet IDs where the File System is located |
+| <a name="output_fsx_vpc_id"></a> [fsx_vpc_id](#output_fsx_vpc_id) | VPC ID where the File System is located |
+
 <!-- END_TF_DOCS -->
