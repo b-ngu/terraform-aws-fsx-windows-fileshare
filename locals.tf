@@ -5,7 +5,7 @@ locals {
   team        = var.team
   purpose     = var.purpose
 
-  resource_prefix = "${local.team}-${local.environment}-${local.purpose}"
+  resource_prefix = "${local.team}-${local.environment}"
 
   fsx_ports = [
     {
