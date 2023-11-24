@@ -7,8 +7,8 @@ data "aws_kms_alias" "fsx" {
 }
 
 resource "aws_security_group" "fsx" {
-  name        = "${local.resource_prefix}-fsx-sg.${var.managed_ad_fqdn}"
-  description = "${local.resource_prefix}-fsx-sg ${var.managed_ad_fqdn}"
+  name        = "${local.resource_prefix}-fsx-sg.${var.self_managed_ad_domain_name}"
+  description = "${local.resource_prefix}-fsx-sg ${var.self_managed_ad_domain_name}"
 
   dynamic "ingress" {
     for_each = local.fsx_ports
@@ -30,15 +30,23 @@ resource "aws_security_group" "fsx" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = merge(
-    { "Name" = "${local.resource_prefix}-fsx-sg.${var.managed_ad_fqdn}"},
+    { "Name" = "${local.resource_prefix}-fsx-sg.${var.self_managed_ad_domain_name}"},
     var.tags,
   )
   vpc_id = var.vpc_id
 }
 
 resource "aws_fsx_windows_file_system" "main" {
-  active_directory_id             = var.managed_ad_id
-  aliases                         = ["${local.resource_prefix}.${var.managed_ad_fqdn}"]
+
+  self_managed_active_directory {
+    dns_ips           = var.self_managed_ad_dns_ips
+    domain_name       = var.self_managed_ad_domain_name
+    username          = var.self_managed_ad_username
+    password          = var.self_managed_ad_password
+    organizational_unit_distinguished_name = var.self_managed_ad_ou
+  }
+
+  aliases                         = ["${local.resource_prefix}.${var.self_managed_ad_domain_name}"]
   automatic_backup_retention_days = var.automatic_backup_retention_days
   deployment_type                 = var.deployment_type
   kms_key_id                      = data.aws_kms_alias.fsx.arn
@@ -49,7 +57,7 @@ resource "aws_fsx_windows_file_system" "main" {
   storage_type                    = var.storage_type
   subnet_ids                      = var.subnet_ids
   tags = {
-    Name = "${local.resource_prefix}-fsx.${var.managed_ad_fqdn}"
+    Name = "${local.resource_prefix}-fsx.${var.self_managed_ad_domain_name}"
   }
   throughput_capacity = var.throughput_capacity
 }

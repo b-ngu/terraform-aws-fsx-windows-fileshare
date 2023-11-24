@@ -16,23 +16,27 @@ The main purpose of this module is to provision an FSx for Windows File Server, 
 
 ```hcl
 module "fsx_windows" {
-  source  = "path_to_this_module"
+  source = "../../" # Update this with the actual path to your module
 
-  contact     = my_email@email.com
-  environment = dev
-  team        = team-name
-  purpose     = fsx-single-az
+  # VPC ID where your resources will be deployed
+  vpc_id = "vpc-123abc45"
 
+  # Self-Managed AD Configuration
+  self_managed_ad_dns_ips = ["10.0.0.1", "10.0.0.2"]
+  self_managed_ad_domain_name = "example.com"
+  self_managed_ad_username = "admin"
+  self_managed_ad_password = "password" # It's highly recommended to use a secrets manager instead of hardcoding
+  self_managed_ad_ou = "OU=YourOU,DC=example,DC=com"
+
+  # FSx Configuration
   automatic_backup_retention_days = 7
-  deployment_type                 = "SINGLE_AZ_2"
-  managed_ad_fqdn                 = "corp.example.com"
-  managed_ad_id                   = "d-123456789"
-  storage_capacity                = 32
-  storage_type                    = "SSD"
-  subnet_ids                      = ["subnet-123456abcdef"]
-  throughput_capacity             = 16
-  vpc_id                          = "vpc-123456789"
-}
+  deployment_type = "SINGLE_AZ_1"
+  fsx_kms_key = "aws/fsx"
+  storage_capacity = 300
+  storage_type = "SSD"
+  subnet_ids = ["subnet-678fgh56", "subnet-123abc34"] # Replace with your actual subnet IDs
+  throughput_capacity = 16
+
 
 ```
 
@@ -41,7 +45,7 @@ Replace `path_to_this_module` with the path to where you have this module.
 ## FSx Components
 
 1. **File System**: The primary resource representing a virtual file system.
-2. **Windows Authentication**: This module assumes you are using `AWS Managed Microsoft AD` (different from self-managed Active Directory) to authenticate and manage your file system users and groups.
+2. **Windows Authentication**: This module assumes you are using `self-managed Active Directory` (different from AWS Managed Microsoft AD) to authenticate and manage your file system users and groups.
 3. **Backup**: Automatic daily backups of your file system are taken and retained for 7 days. You can also manually take backups.
 
 ## FSx Configuration
@@ -115,14 +119,16 @@ No modules.
 | <a name="input_automatic_backup_retention_days"></a> [automatic_backup_retention_days](#input_automatic_backup_retention_days) | The number of days to retain automatic backups. Minimum of 0 and maximum of 90 | `number` | `7` | no |
 | <a name="input_deployment_type"></a> [deployment_type](#input_deployment_type) | Specifies the file system deployment type, valid values are MULTI_AZ_1, SINGLE_AZ_1 and SINGLE_AZ_2 | `string` | `SINGLE_AZ_1` | no |
 | <a name="input_fsx_kms_key"></a> [fsx_kms_key](#input_fsx_kms_key) | ARN for the KMS Key to encrypt the file system at rest | `string` | `aws/fsx` | no |
-| <a name="input_managed_ad_fqdn"></a> [managed_ad_fqdn](#input_managed_ad_fqdn) | FQDN of the AWS Managed Microsoft AD | `string` | n/a | yes |
-| <a name="input_managed_ad_id"></a> [managed_ad_id](#input_managed_ad_id) | Directory ID of the AWS Managed Microsoft AD | `string` | n/a | yes |
 | <a name="input_storage_capacity"></a> [storage_capacity](#input_storage_capacity) | Storage capacity (GiB) of the file system. Minimum of 32 and maximum of 65536 | `number` | `32` | no |
 | <a name="input_storage_type"></a> [storage_type](#input_storage_type) | Specifies the storage type, valid values are SSD and HDD | `string` | `SSD` | no |
 | <a name="input_subnet_ids"></a> [subnet_ids](#input_subnet_ids) | Private subnet ID(s) for the Amazon FSx for Windows | `list(string)` | n/a | yes |
 | <a name="input_throughput_capacity"></a> [throughput_capacity](#input_throughput_capacity) | Throughput (megabytes per second) of the file system in power of 2 increments. Minimum of 8 and maximum of 2048 | `number` | `16` | no |
 | <a name="input_vpc_id"></a> [vpc_id](#input_vpc_id) | VPC ID for the Amazon FSx for Windows | `string` | n/a | yes |
-
+| <a name="input_self_managed_ad_dns_ips"></a> [self_managed_ad_dns_ips](#input_self_managed_ad_dns_ips) | List of DNS server IP addresses for the self-managed Active Directory | `list(string)` | n/a | yes |
+| <a name="input_self_managed_ad_domain_name"></a> [self_managed_ad_domain_name](#input_self_managed_ad_domain_name) | Fully qualified domain name of the self-managed Active Directory | `string` | n/a | yes |
+| <a name="input_self_managed_ad_username"></a> [self_managed_ad_username](#input_self_managed_ad_username) | Username for the self-managed Active Directory | `string` | n/a | yes |
+| <a name="input_self_managed_ad_password"></a> [self_managed_ad_password](#input_self_managed_ad_password) | Password for the self-managed Active Directory | `string` | n/a | yes |
+| <a name="input_self_managed_ad_ou"></a> [self_managed_ad_ou](#input_self_managed_ad_ou) | Organizational unit within the self-managed Active Directory | `string` | `OU=AmazonFSx,DC=YourDomain,DC=com` | no |
 
 ## Outputs
 

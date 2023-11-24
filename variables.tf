@@ -48,16 +48,6 @@ variable "fsx_kms_key" {
   description = "ARN for the KMS Key to encrypt the file system at rest"
 }
 
-variable "managed_ad_fqdn" {
-  type        = string
-  description = "FQDN of the AWS Managed Microsoft AD"
-}
-
-variable "managed_ad_id" {
-  type        = string
-  description = "Directory ID of the AWS Managed Microsoft AD"
-}
-
 variable "storage_capacity" {
   type        = number
   default     = 32
@@ -88,4 +78,30 @@ variable "throughput_capacity" {
 variable "vpc_id" {
   type        = string
   description = "VPC ID for the Amazon FSx for Windows"
+}
+
+variable "self_managed_ad_dns_ips" {
+  type        = list(string)
+  description = "List of DNS server IP addresses for the self-managed Active Directory"
+}
+
+variable "self_managed_ad_domain_name" {
+  type        = string
+  description = "Fully qualified domain name of the self-managed Active Directory"
+}
+
+variable "self_managed_ad_username" {
+  type        = string
+  description = "Username for the self-managed Active Directory"
+}
+
+variable "self_managed_ad_password" {
+  type        = string
+  description = "Password for the self-managed Active Directory"
+}
+
+variable "self_managed_ad_ou" {
+  type        = string
+  description = "Organizational unit within the self-managed Active Directory"
+  default     = "OU=AmazonFSx,DC=YourDomain,DC=com" # Example value
 }
